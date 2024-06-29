@@ -26,7 +26,7 @@ export async function POST(req) {
         } catch (err) {
             if (err.code === 'ENOENT') {
                 // Buat direktori html jika belum ada
-                await fs.mkdir(baseDir, { recursive: true });
+                await fs.mkdir(process.cwd() + baseDir, { recursive: true });
                 console.log(`Directory created: ${baseDir}`);
             } else {
                 throw err; // Lempar kesalahan lain

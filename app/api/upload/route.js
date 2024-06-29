@@ -50,7 +50,7 @@ export async function POST(req) {
                 urls.push(`${generateID}/${file.name}`);
                 const arrayBuffer = await file.arrayBuffer();
                 const buffer = new Uint8Array(arrayBuffer);
-                const filePath = `${uploadDir}/${file.name}`;
+                const filePath = `/${uploadDir}/${file.name}`;
                 await fs.writeFile(filePath, buffer);
                 console.log(`File written: ${filePath}`);
             } else {

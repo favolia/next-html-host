@@ -4,6 +4,31 @@ import { revalidatePath } from "next/cache";
 import fs from 'fs/promises';
 import short from "short-uuid";
 
+export const GET = async req => {
+    try {
+        const generateID = short.generate();
+        const baseDir = '/public/html/';
+        const uploadDir = baseDir + generateID;
+
+        try {
+            await fs.access(process.cwd() + baseDir);
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                // Buat direktori html jika belum ada
+                await fs.mkdir(process.cwd() + baseDir, { recursive: true });
+                console.log(`Directory created: ${baseDir}`);
+            } else {
+                throw err; // Lempar kesalahan lain
+            }
+        }
+
+        return NextResponse.json({ status: "success", directory: baseDir, uploadDir });
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json({ status: "fail", error: e.message });
+    }
+}
+
 export async function POST(req) {
     try {
         // Mengambil FormData dari request

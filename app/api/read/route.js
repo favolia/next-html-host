@@ -12,7 +12,7 @@ export const GET = async req => {
 
         let customDir;
         try {
-            customDir = await fs.readdir(custom);
+            customDir = await fs.readdir(custom||process.cwd());
         } catch (err) {
             if (err.code === 'ENOENT') {
                 customDir = null; // Directory does not exist
@@ -46,10 +46,10 @@ export const GET = async req => {
         }
 
         return NextResponse.json({
-            rootDir,
-            htmlDir,
-            inDir,
-            customDir
+            root: rootDir,
+            html: htmlDir,
+            inDir: inDir,
+            customDir: customDir
         }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

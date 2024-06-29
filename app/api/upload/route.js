@@ -18,7 +18,7 @@ export async function POST(req) {
 
         // Generate UUID untuk nama direktori baru
         const generateID = short.generate();
-        const baseDir = process.cwd() + '/html/';
+        const baseDir = process.cwd() + '/public/html/';
         const uploadDir = baseDir + generateID;
 
         // Periksa apakah direktori html sudah ada

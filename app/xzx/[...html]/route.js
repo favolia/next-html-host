@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 /**@param {NextRequest} req */
 export const GET = async req => {
     try {
-        const html = await fs.readFile(process.cwd() + `/public/html${req.url.split("xzx")[1]}`, "utf8")
+        const html = await fs.readFile(process.cwd() + `/html${req.url.split("xzx")[1]}`, "utf8")
 
         return new NextResponse(html,
             {

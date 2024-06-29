@@ -18,7 +18,7 @@ export async function POST(req) {
         }
         const generateID = short.generate();
 
-        const uploadDir = path.join(process.cwd(), 'public', 'html', generateID);
+        const uploadDir = path.join('html', generateID);
 
         // Debug: log path information
         console.log(`process.cwd(): ${process.cwd()}`);

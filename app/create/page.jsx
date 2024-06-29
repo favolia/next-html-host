@@ -14,7 +14,7 @@ const page = () => {
     }
 
   return (
-    <button onClick={createFolder}>Create Folder</button>
+    <button onClick={createFolder}>Read Folder</button>
   )
 }
 

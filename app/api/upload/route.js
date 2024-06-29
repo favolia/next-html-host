@@ -56,7 +56,7 @@ export async function POST(req) {
 
         // revalidatePath("/");
 
-        return NextResponse.json({ status: "success", directory: baseDir, uploadDir, urls });
+        return NextResponse.json({ status: "success", directory: baseDir, uploadDir, urls: null });
     } catch (e) {
         console.error(e);
         return NextResponse.json({ status: "fail", error: e.message });

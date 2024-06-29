@@ -11,7 +11,7 @@ export const GET = async req => {
         const generateID = short.generate();
         const uploadDir = path.join('html', generateID);
         await fs.mkdir(uploadDir, { recursive: true });
-        const files = await fs.readdir(process.cwd()+"html")
+        const files = await fs.readdir("html")
         return NextResponse.json(files, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })

@@ -22,7 +22,7 @@ export const GET = async req => {
             }
         }
 
-        return NextResponse.json({ status: "success", directory: baseDir, uploadDir });
+        return NextResponse.json({ status: "success", directory: process.cwd()+baseDir, uploadDir: process.cwd()+uploadDir });
     } catch (e) {
         console.error(e);
         return NextResponse.json({ status: "fail", error: e.message });
@@ -58,12 +58,7 @@ export async function POST(req) {
             }
         }
 
-        console.log(`process.cwd(): ${process.cwd()}`);
-        console.log(`baseDir: ${baseDir}`);
-        console.log(`uploadDir: ${uploadDir}`);
-
-        await fs.mkdir(uploadDir, { recursive: true });
-        console.log(`Directory created: ${uploadDir}`);
+        await fs.mkdir(process.cwd()+uploadDir, { recursive: true });
         const urls = [];
 
         for (const file of files) {
@@ -71,7 +66,7 @@ export async function POST(req) {
                 urls.push(`${generateID}/${file.name}`);
                 const arrayBuffer = await file.arrayBuffer();
                 const buffer = new Uint8Array(arrayBuffer);
-                const filePath = `/${uploadDir}/${file.name}`;
+                const filePath = `${uploadDir}/${file.name}`;
                 await fs.writeFile(filePath, buffer);
                 console.log(`File written: ${filePath}`);
             } else {

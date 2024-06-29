@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import fs from 'fs/promises';
 import short from "short-uuid";
-import path from 'path';
 
 export async function POST(req) {
     try {
@@ -18,10 +17,12 @@ export async function POST(req) {
         }
         const generateID = short.generate();
 
-        const uploadDir = path.join('html', generateID);
+        const baseDir = process.cwd() + '/html/';
+        const uploadDir = baseDir + generateID;
 
         // Debug: log path information
         console.log(`process.cwd(): ${process.cwd()}`);
+        console.log(`baseDir: ${baseDir}`);
         console.log(`uploadDir: ${uploadDir}`);
 
         // Buat direktori baru dengan nama UUID
@@ -34,7 +35,7 @@ export async function POST(req) {
                 urls.push(`${generateID}/${file.name}`);
                 const arrayBuffer = await file.arrayBuffer();
                 const buffer = new Uint8Array(arrayBuffer);
-                const filePath = path.join(uploadDir, file.name);
+                const filePath = `${uploadDir}/${file.name}`;
                 await fs.writeFile(filePath, buffer);
                 console.log(`File written: ${filePath}`);
             } else {

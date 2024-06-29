@@ -1,0 +1,48 @@
+import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
+import { promises as fs } from 'fs';
+// import { v4 as uuidv4 } from 'uuid';
+import short from "short-uuid";
+import path from 'path';
+
+export async function POST(req) {
+    try {
+        /**
+         * @type {FormData}
+         */
+        const formData = await req.formData();
+        const files = formData.getAll("file");
+        if (files.length === 0) {
+            console.log('No files uploaded.');
+            return NextResponse.json({ status: "fail", error: "No files uploaded" });
+        }
+        const generateID = short.generate()
+
+        const uploadDir = path.join(process.cwd(), 'public', 'html', generateID);
+
+        // Buat direktori baru dengan nama UUID
+        await fs.mkdir(uploadDir, { recursive: true });
+        console.log(`Directory created: ${uploadDir}`);
+        const urls = []
+
+        for (const file of files) {
+            if (file.type === "text/html") {
+                urls.push(`${generateID}/${file.name}`)
+                const arrayBuffer = await file.arrayBuffer();
+                const buffer = new Uint8Array(arrayBuffer);
+                const filePath = path.join(uploadDir, file.name);
+                await fs.writeFile(filePath, buffer);
+                console.log(`File written: ${filePath}`);
+            } else {
+                console.log(`Skipped file (not HTML): ${file.name}`);
+            }
+        }
+
+        revalidatePath("/");
+
+        return NextResponse.json({ status: "success", directory: uploadDir, urls });
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json({ status: "fail", error: e.message });
+    }
+}

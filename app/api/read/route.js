@@ -23,7 +23,7 @@ export const GET = async req => {
         
         let htmlDir;
         try {
-            htmlDir = await fs.readdir(process.cwd() + "/html");
+            htmlDir = await fs.readdir(process.cwd() + "/public/html");
         } catch (err) {
             if (err.code === 'ENOENT') {
                 htmlDir = null; // Directory does not exist
@@ -35,7 +35,7 @@ export const GET = async req => {
         let inDir = null;
         if (id && htmlDir) {
             try {
-                inDir = await fs.readdir(process.cwd() + "/html/" + id);
+                inDir = await fs.readdir(process.cwd() + "/public/html/" + id);
             } catch (err) {
                 if (err.code === 'ENOENT') {
                     inDir = null; // Subdirectory does not exist

@@ -22,7 +22,7 @@ export async function POST(req) {
         const uploadDir = baseDir + generateID;
 
         try {
-            await fs.access(baseDir);
+            await fs.access(process.cwd() + baseDir);
         } catch (err) {
             if (err.code === 'ENOENT') {
                 // Buat direktori html jika belum ada

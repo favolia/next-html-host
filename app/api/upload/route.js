@@ -21,26 +21,24 @@ export async function POST(req) {
         const baseDir = process.cwd() + '/public/html/';
         const uploadDir = baseDir + generateID;
 
-        // Periksa apakah direktori html sudah ada
-        try {
-            await fs.access(baseDir);
-        } catch (err) {
-            if (err.code === 'ENOENT') {
-                // Buat direktori html jika belum ada
-                await fs.mkdir(baseDir, { recursive: true });
-                console.log(`Directory created: ${baseDir}`);
-            } else {
-                throw err; // Lempar kesalahan lain
-            }
-        }
+        // try {
+        //     await fs.access(baseDir);
+        // } catch (err) {
+        //     if (err.code === 'ENOENT') {
+        //         // Buat direktori html jika belum ada
+        //         await fs.mkdir(baseDir, { recursive: true });
+        //         console.log(`Directory created: ${baseDir}`);
+        //     } else {
+        //         throw err; // Lempar kesalahan lain
+        //     }
+        // }
 
-        // Debug: log informasi path
-        console.log(`process.cwd(): ${process.cwd()}`);
-        console.log(`baseDir: ${baseDir}`);
-        console.log(`uploadDir: ${uploadDir}`);
+        // console.log(`process.cwd(): ${process.cwd()}`);
+        // console.log(`baseDir: ${baseDir}`);
+        // console.log(`uploadDir: ${uploadDir}`);
 
-        await fs.mkdir(uploadDir, { recursive: true });
-        console.log(`Directory created: ${uploadDir}`);
+        // await fs.mkdir(uploadDir, { recursive: true });
+        // console.log(`Directory created: ${uploadDir}`);
         // const urls = [];
 
         // for (const file of files) {
@@ -58,7 +56,7 @@ export async function POST(req) {
 
         // revalidatePath("/");
 
-        return NextResponse.json({ status: "success", directory: uploadDir, urls });
+        return NextResponse.json({ status: "success", directory: baseDir, uploadDir, urls });
     } catch (e) {
         console.error(e);
         return NextResponse.json({ status: "fail", error: e.message });

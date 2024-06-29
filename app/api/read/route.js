@@ -1,25 +1,45 @@
 "use server";
 import { NextResponse } from "next/server";
-import fs from "fs/promises"
+import fs from "fs/promises";
 
 export const GET = async req => {
-    const params = param => req.nextUrl.searchParams.get(param)
-    const id = params("id") || null
+    const params = param => req.nextUrl.searchParams.get(param);
+    const id = params("id") || null;
 
     try {
-        // await fs.mkdir("_BROOO")
-        // console.log("_BROOO folder has created")
-        // const generateID = short.generate();
-        // const uploadDir = path.join('html', generateID);
-        // await fs.mkdir(uploadDir, { recursive: true });
-        const rootDir = await fs.readdir(process.cwd())
-        const htmlDir = await fs.readdir(process.cwd() + "/html")
+        const rootDir = await fs.readdir(process.cwd());
+
+        // Check if the 'html' directory exists
+        let htmlDir;
+        try {
+            htmlDir = await fs.readdir(process.cwd() + "/html");
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                htmlDir = null; // Directory does not exist
+            } else {
+                throw err; // Some other error occurred
+            }
+        }
+
+        let inDir = null;
+        if (id && htmlDir) {
+            try {
+                inDir = await fs.readdir(process.cwd() + "/html/" + id);
+            } catch (err) {
+                if (err.code === 'ENOENT') {
+                    inDir = null; // Subdirectory does not exist
+                } else {
+                    throw err; // Some other error occurred
+                }
+            }
+        }
+
         return NextResponse.json({
             root: rootDir,
             html: htmlDir,
-            inDir: id ? await fs.readdir(process.cwd() + "/html/" + id) : null
-        }, { status: 200 })
+            inDir: inDir
+        }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
-}
+};

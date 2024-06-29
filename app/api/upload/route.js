@@ -39,27 +39,24 @@ export async function POST(req) {
         console.log(`baseDir: ${baseDir}`);
         console.log(`uploadDir: ${uploadDir}`);
 
-        // Buat direktori baru dengan nama UUID
         await fs.mkdir(uploadDir, { recursive: true });
         console.log(`Directory created: ${uploadDir}`);
-        const urls = [];
+        // const urls = [];
 
-        // Proses setiap file yang diunggah
-        for (const file of files) {
-            if (file.type === "text/html") {
-                urls.push(`${generateID}/${file.name}`);
-                const arrayBuffer = await file.arrayBuffer();
-                const buffer = new Uint8Array(arrayBuffer);
-                const filePath = `/${uploadDir}/${file.name}`;
-                await fs.writeFile(filePath, buffer);
-                console.log(`File written: ${filePath}`);
-            } else {
-                console.log(`Skipped file (not HTML): ${file.name}`);
-            }
-        }
+        // for (const file of files) {
+        //     if (file.type === "text/html") {
+        //         urls.push(`${generateID}/${file.name}`);
+        //         const arrayBuffer = await file.arrayBuffer();
+        //         const buffer = new Uint8Array(arrayBuffer);
+        //         const filePath = `/${uploadDir}/${file.name}`;
+        //         await fs.writeFile(filePath, buffer);
+        //         console.log(`File written: ${filePath}`);
+        //     } else {
+        //         console.log(`Skipped file (not HTML): ${file.name}`);
+        //     }
+        // }
 
-        // Revalidate path setelah file diunggah
-        revalidatePath("/");
+        // revalidatePath("/");
 
         return NextResponse.json({ status: "success", directory: uploadDir, urls });
     } catch (e) {

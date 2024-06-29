@@ -1,6 +1,7 @@
+"use server";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { promises as fs } from 'fs';
+import fs from 'fs/promises';
 // import { v4 as uuidv4 } from 'uuid';
 import short from "short-uuid";
 import path from 'path';

@@ -4,31 +4,6 @@ import { revalidatePath } from "next/cache";
 import fs from 'fs/promises';
 import short from "short-uuid";
 
-// export const GET = async req => {
-//     try {
-//         const generateID = short.generate();
-//         const baseDir = '/db/';
-//         const uploadDir = baseDir + generateID;
-
-//         try {
-//             await fs.access(process.cwd() + baseDir);
-//         } catch (err) {
-//             if (err.code === 'ENOENT') {
-//                 // Buat direktori html jika belum ada
-//                 await fs.mkdir(process.cwd() + baseDir, { recursive: true });
-//                 console.log(`Directory created: ${baseDir}`);
-//             } else {
-//                 throw err; // Lempar kesalahan lain
-//             }
-//         }
-
-//         return NextResponse.json({ status: "success", directory: process.cwd()+baseDir, uploadDir: process.cwd()+uploadDir });
-//     } catch (e) {
-//         console.error(e);
-//         return NextResponse.json({ status: "fail", error: e.message });
-//     }
-// }
-
 export async function POST(req) {
     try {
         // Mengambil FormData dari request
@@ -59,16 +34,12 @@ export async function POST(req) {
         }
 
         await fs.mkdir(uploadDir, { recursive: true });
-        const urls = []
-        const filePaths = []
 
         for (const file of files) {
             if (file.type === "text/html") {
-                urls.push(`${generateID}/${file.name}`);
                 const arrayBuffer = await file.arrayBuffer();
                 const buffer = new Uint8Array(arrayBuffer);
                 const filePath = `${uploadDir}/${file.name}`;
-                filePaths.push(filePath);
                 await fs.writeFile(filePath, buffer);
                 console.log(`File written: ${filePath}`);
             } else {
@@ -78,7 +49,7 @@ export async function POST(req) {
 
         revalidatePath("/");
 
-        return NextResponse.json({ status: "success", directory: baseDir, filePaths, urls });
+        return NextResponse.json({ status: "success", directory: generateID+"/onk" });
     } catch (e) {
         console.error(e);
         return NextResponse.json({ status: "fail", error: e.message });

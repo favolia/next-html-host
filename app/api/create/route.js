@@ -9,13 +9,13 @@ export const GET = async req => {
 
     try {
 
-        await fs.writeFile(process.cwd()+"/db/"+"example.html", "<p>HAI</p>", (err) => {
+        await fs.writeFile("/db/"+"example.html", "<p>HAI</p>", (err) => {
             if (err)
                 console.log(err);
             else {
                 console.log("File written successfully\n");
                 console.log("The written has the following contents:");
-                console.log(fs.readFileSync(process.cwd()+"/db/"+"example.html", "utf8"));
+                // console.log(fs.readFileSync(process.cwd()+"/db/"+"example.html", "utf8"));
             }
         })
 

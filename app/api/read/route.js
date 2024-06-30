@@ -20,22 +20,11 @@ export const GET = async req => {
                 throw err; // Some other error occurred
             }
         }
-        
-        let htmlDir;
-        try {
-            htmlDir = await fs.readdir(process.cwd() + "/public/html");
-        } catch (err) {
-            if (err.code === 'ENOENT') {
-                htmlDir = null; // Directory does not exist
-            } else {
-                throw err; // Some other error occurred
-            }
-        }
 
         let inDir = null;
         if (id && htmlDir) {
             try {
-                inDir = await fs.readdir(process.cwd() + "/public/html/" + id);
+                inDir = await fs.readdir(process.env.NODE_ENV === 'development' ? `tmp${id}` : "../../tmp/" + id);
             } catch (err) {
                 if (err.code === 'ENOENT') {
                     inDir = null; // Subdirectory does not exist
@@ -47,7 +36,6 @@ export const GET = async req => {
 
         return NextResponse.json({
             root: rootDir,
-            html: htmlDir,
             inDir: inDir,
             customDir: customDir
         }, { status: 200 });

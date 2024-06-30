@@ -18,7 +18,7 @@ export async function POST(req) {
 
         // Generate UUID untuk nama direktori baru
         const generateID = short.generate();
-        const baseDir = '../../tmp/';
+        const baseDir = process.env.NODE_ENV === 'development' ? 'tmp/' : '../../tmp/';
         const uploadDir = baseDir + generateID;
 
         try {
@@ -34,6 +34,7 @@ export async function POST(req) {
         }
 
         await fs.mkdir(uploadDir, { recursive: true });
+        const urls = [];
 
         for (const file of files) {
             if (file.type === "text/html") {
@@ -41,6 +42,7 @@ export async function POST(req) {
                 const buffer = new Uint8Array(arrayBuffer);
                 const filePath = `${uploadDir}/${file.name}`;
                 await fs.writeFile(filePath, buffer);
+                urls.push(`${generateID}/${file.name}`);
                 console.log(`File written: ${filePath}`);
             } else {
                 console.log(`Skipped file (not HTML): ${file.name}`);
@@ -49,7 +51,7 @@ export async function POST(req) {
 
         revalidatePath("/");
 
-        return NextResponse.json({ status: "success", directory: generateID+"/onk" });
+        return NextResponse.json({ status: "success", directory: "onk/"+generateID, urls });
     } catch (e) {
         console.error(e);
         return NextResponse.json({ status: "fail", error: e.message });

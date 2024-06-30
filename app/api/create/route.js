@@ -8,31 +8,6 @@ export const GET = async req => {
     const custom = params("custom") || null;
 
     try {
-        const rootDir = await fs.readdir(process.cwd()+"/db/");
-
-        let customDir;
-        try {
-            customDir = await fs.readdir(custom||process.cwd());
-        } catch (err) {
-            if (err.code === 'ENOENT') {
-                customDir = null; // Directory does not exist
-            } else {
-                throw err; // Some other error occurred
-            }
-        }
-
-        let inDir = null;
-        if (id && htmlDir) { 
-            try {
-                inDir = await fs.readdir(process.cwd() + "/db/" + id);
-            } catch (err) {
-                if (err.code === 'ENOENT') {
-                    inDir = null; // Subdirectory does not exist
-                } else {
-                    throw err; // Some other error occurred
-                }
-            }
-        }
 
         await fs.writeFile(process.cwd()+"/db/"+"example.html", "<p>HAI</p>", (err) => {
             if (err)
@@ -45,9 +20,7 @@ export const GET = async req => {
         })
 
         return NextResponse.json({
-            root: rootDir,
-            inDir: inDir,
-            customDir: customDir
+            status: true
         }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

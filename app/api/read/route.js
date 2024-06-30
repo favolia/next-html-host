@@ -1,6 +1,7 @@
 "use server";
 import { NextResponse } from "next/server";
 import fs from "fs/promises";
+import path from "@/config.json";
 
 export const GET = async req => {
     const params = param => req.nextUrl.searchParams.get(param);
@@ -22,15 +23,13 @@ export const GET = async req => {
         }
 
         let inDir = null;
-        if (id && htmlDir) {
-            try {
-                inDir = await fs.readdir(process.env.NODE_ENV === 'development' ? `tmp${id}` : "../../tmp/" + id);
-            } catch (err) {
-                if (err.code === 'ENOENT') {
-                    inDir = null; // Subdirectory does not exist
-                } else {
-                    throw err; // Some other error occurred
-                }
+        try {
+            inDir = await fs.readdir(process.env.NODE_ENV === 'development' ? `tmp${id}` : `${path}/` + id);
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                inDir = null; // Subdirectory does not exist
+            } else {
+                throw err; // Some other error occurred
             }
         }
 

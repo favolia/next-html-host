@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import fs from 'fs/promises';
 import short from "short-uuid";
+import { path } from "@/config.json";
 
 export async function POST(req) {
     try {
@@ -18,7 +19,7 @@ export async function POST(req) {
 
         // Generate UUID untuk nama direktori baru
         const generateID = short.generate();
-        const baseDir = process.env.NODE_ENV === 'development' ? 'tmp/' : '../../tmp/';
+        const baseDir = process.env.NODE_ENV === 'development' ? 'tmp/' : `${path}/`;
         const uploadDir = baseDir + generateID;
 
         try {

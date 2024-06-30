@@ -59,12 +59,16 @@ export async function POST(req) {
         }
 
         await fs.mkdir(uploadDir, { recursive: true });
+        const urls = []
+        const filePaths = []
 
         for (const file of files) {
             if (file.type === "text/html") {
+                urls.push(`${generateID}/${file.name}`);
                 const arrayBuffer = await file.arrayBuffer();
                 const buffer = new Uint8Array(arrayBuffer);
                 const filePath = `${uploadDir}/${file.name}`;
+                filePaths.push(filePath);
                 await fs.writeFile(filePath, buffer);
                 console.log(`File written: ${filePath}`);
             } else {
@@ -74,7 +78,7 @@ export async function POST(req) {
 
         revalidatePath("/");
 
-        return NextResponse.json({ status: "success", directory: baseDir });
+        return NextResponse.json({ status: "success", directory: baseDir, filePaths, urls });
     } catch (e) {
         console.error(e);
         return NextResponse.json({ status: "fail", error: e.message });

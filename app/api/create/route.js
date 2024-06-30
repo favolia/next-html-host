@@ -24,7 +24,7 @@ export const GET = async req => {
         let inDir = null;
         if (id && htmlDir) { 
             try {
-                inDir = await fs.readdir(process.cwd() + "/db/example/" + id);
+                inDir = await fs.readdir(process.cwd() + "/db/" + id);
             } catch (err) {
                 if (err.code === 'ENOENT') {
                     inDir = null; // Subdirectory does not exist
@@ -34,13 +34,13 @@ export const GET = async req => {
             }
         }
 
-        await fs.writeFile(process.cwd()+"/db/example/"+"example.html", "<p>HAI</p>", (err) => {
+        await fs.writeFile(process.cwd()+"/db/"+"example.html", "<p>HAI</p>", (err) => {
             if (err)
                 console.log(err);
             else {
                 console.log("File written successfully\n");
                 console.log("The written has the following contents:");
-                console.log(fs.readFileSync(process.cwd()+"/db/example/"+"example.html", "utf8"));
+                console.log(fs.readFileSync(process.cwd()+"/db/"+"example.html", "utf8"));
             }
         })
 

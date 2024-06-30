@@ -43,7 +43,7 @@ export async function POST(req) {
 
         // Generate UUID untuk nama direktori baru
         const generateID = short.generate();
-        const baseDir = process.cwd() + '/db/';
+        const baseDir = '../../tmp/';
         const uploadDir = baseDir + generateID;
 
         try {

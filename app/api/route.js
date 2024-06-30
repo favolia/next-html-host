@@ -1,15 +1,20 @@
-import { promises as fs } from 'fs';
 import { NextRequest, NextResponse } from 'next/server';
+import { promises as fs } from 'fs';
+
 
 /**@param {NextRequest} req */
 export const GET = async req => {
-    const arr = []
+    const params = param => req.nextUrl.searchParams.get(param);
+    const custom = params("custom") || null;
     try {
-        const files = await fs.readdir(process.cwd() + "/html");
-        for (const file of files) arr.push(file);
-    } catch (err) {
-        console.error(err);
-    }
+        const html = await fs.readFile(custom, "utf8")
 
-    return NextResponse.json(arr)
+        return new NextResponse(html,
+            {
+                status: 200, headers: { 'content-type': 'text/html' }
+            }
+        )
+    } catch (error) {
+        return NextResponse.json("File not found", { status: 404 })
+    }
 }

@@ -9,7 +9,7 @@ export const GET = async req => {
 
     try {
 
-        await fs.writeFile("/db/"+"example.html", "<p>HAI</p>", (err) => {
+        await fs.writeFile("example.html", "<p>HAI</p>", (err) => {
             if (err)
                 console.log(err);
             else {

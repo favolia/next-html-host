@@ -13,6 +13,6 @@ export const GET = async req => {
             }
         )
     } catch (error) {
-        return NextResponse.json(`File not found ../tmp${req.url.split("xzx")[1]}`, { status: 404 })
+        return NextResponse.json(`File not found ../../tmp${req.url}`, { status: 404 })
     }
 }
